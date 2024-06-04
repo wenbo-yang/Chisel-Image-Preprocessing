@@ -1,6 +1,4 @@
 {
-    "serviceName": "skeletonizer",
-    "shortName": "c-skeleton",
-    "imageHeight": 50,
-    "imageWidth": 40
+    "serviceName": "image-preprocessor",
+    "shortName": "c-preprocessor"
 }

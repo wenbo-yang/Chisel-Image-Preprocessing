@@ -2,10 +2,9 @@ import express from 'express';
 import http from 'http';
 import https from 'https';
 import fs from 'fs';
-import { ControllerFactory } from './controller/controllerFactory';
-import { SkeletonizationServiceConfig } from './config';
+import { ImagePreprocessingServiceConfig } from './config';
 
-const config = new SkeletonizationServiceConfig();
+const config = new ImagePreprocessingServiceConfig();
 
 const servicePorts = config.servicePorts;
 
@@ -26,15 +25,7 @@ app.get('/healthCheck', (req, res) => {
 });
 
 app.post('/skeletonize', async (req, res) => {
-    try {
-        const skeletonizeController = ControllerFactory.makeSkeletonizeController(config);
-        const data = await skeletonizeController.skeletonize(req);
-
-        res.send(data);
-    } catch (e) {
-        console.log(e as Error);
-        res.send(e).status(500);
-    }
+        res.send({error: 'not implemented'}).status(500);
 });
 
 const httpServer = http.createServer(app);

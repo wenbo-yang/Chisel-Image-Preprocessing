@@ -1,8 +1,8 @@
 import * as staticServiceConfig from '../configs/service.config.json';
 import * as globalServicePortMappings from '../Chisel-Global-Service-Configs/configs/globalServicePortMappings.json';
-import { ISkeletonizationServiceConfig, ServiceConfig, ServicePorts } from './types/skeletonizeTypes';
+import { IImagePreprocessingServiceConfig, ServiceConfig, ServicePorts } from './types/skeletonizeTypes';
 
-export class SkeletonizationServiceConfig implements ISkeletonizationServiceConfig {
+export class ImagePreprocessingServiceConfig implements IImagePreprocessingServiceConfig {
     private serviceConfig: ServiceConfig;
     private globalServicePortMappings: any;
 
@@ -27,7 +27,7 @@ export class SkeletonizationServiceConfig implements ISkeletonizationServiceConf
         return this.serviceConfig.shortName;
     }
 
-    public get useGpuSkeletonizer() {
+    public get useGPU() {
         return false;
     }
 
