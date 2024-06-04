@@ -1,6 +1,6 @@
 import * as staticServiceConfig from '../configs/service.config.json';
 import * as globalServicePortMappings from '../Chisel-Global-Service-Configs/configs/globalServicePortMappings.json';
-import { IImagePreprocessingServiceConfig, ServiceConfig, ServicePorts } from './types/skeletonizeTypes';
+import { IImagePreprocessingServiceConfig, ServiceConfig, ServicePorts } from './types/imagePreprocessingTypes';
 
 export class ImagePreprocessingServiceConfig implements IImagePreprocessingServiceConfig {
     private serviceConfig: ServiceConfig;
@@ -9,14 +9,6 @@ export class ImagePreprocessingServiceConfig implements IImagePreprocessingServi
     constructor(serviceConfig?: ServiceConfig, parsedGlobalServicePortMappings?: any) {
         this.serviceConfig = serviceConfig || staticServiceConfig;
         this.globalServicePortMappings = parsedGlobalServicePortMappings || globalServicePortMappings;
-    }
-
-    public get imageHeight() {
-        return 50;
-    }
-
-    public get imageWidth() {
-        return 40;
     }
 
     public get grayScaleWhiteThreshold() {
