@@ -12,7 +12,6 @@ describe('skeletonize request', () => {
     describe('GET /healthCheck', () => {
         it('should respond with 200', async () => {
             const response = await axiosClient.get(httpsUrl + '/healthCheck');
-
             expect(response.status).toBe(200);
             expect(response.data).toBe('i am healthy!!!');
         });

@@ -3,6 +3,8 @@ import http from 'http';
 import https from 'https';
 import fs from 'fs';
 import { ImagePreprocessingServiceConfig } from './config';
+import { ControllerFactory } from './controller/controllerFactory';
+import { processError } from '../Chisel-Global-Common-Libraries//src/lib/error'; 
 
 const config = new ImagePreprocessingServiceConfig();
 
@@ -24,8 +26,14 @@ app.get('/healthCheck', (req, res) => {
     res.send('i am healthy!!!');
 });
 
-app.post('/skeletonize', async (req, res) => {
-        res.send({error: 'not implemented'}).status(500);
+app.post('/process', async (req, res) => {
+
+    try {
+        const imagePreprocessor = ControllerFactory.makeImagePreprocessingServiceController(config);
+        imagePreprocessor.process(req, res);
+    } catch (e) {
+        processError(e, res);
+    }
 });
 
 const httpServer = http.createServer(app);
