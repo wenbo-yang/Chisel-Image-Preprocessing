@@ -1,9 +1,9 @@
-import fsSync, { ReadStream } from "fs";
-import { BoundingRect, IImagePreprocessingServiceConfig, ImagePreprocessRequestBody, ProcessedImage } from "../types/imagePreprocessorTypes";
-import { COMPRESSIONTYPE, IMAGEDATATYPE } from "../../Chisel-Global-Common-Libraries/src/types/commonTypes";
-import { gzip, ungzip } from "node-gzip";
-import Jimp from "jimp";
-import { ImagePreprocessingServiceConfig } from "../config";
+import fsSync, { ReadStream } from 'fs';
+import { BoundingRect, IImagePreprocessingServiceConfig, ImagePreprocessRequestBody, ProcessedImage } from '../types/imagePreprocessorTypes';
+import { COMPRESSIONTYPE, IMAGEDATATYPE } from '../../Chisel-Global-Common-Libraries/src/types/commonTypes';
+import { gzip, ungzip } from 'node-gzip';
+import Jimp from 'jimp';
+import { ImagePreprocessingServiceConfig } from '../config';
 
 export class ImagePreprocessorModel {
     private config: IImagePreprocessingServiceConfig;
@@ -20,7 +20,7 @@ export class ImagePreprocessorModel {
         const jimp = await this.getJimpImage(body);
         const images = await this.parseImageIntoIndividualItems(jimp);
 
-        const processedImage: ProcessedImage[] = []
+        const processedImage: ProcessedImage[] = [];
         for (let i = 0; i < images.length; i++) {
             const boundingRect = this.findBoundingRect(images[i]);
             const resizedImage = this.resizeImage(images[i], boundingRect, body.outputHeight, body.outputWidth);
@@ -33,7 +33,7 @@ export class ImagePreprocessorModel {
                 processedImage: body.outputCompression === COMPRESSIONTYPE.GZIP ? Buffer.from(await gzip(await blurredImage.getBufferAsync(Jimp.MIME_PNG))).toString('base64') : Buffer.from(await blurredImage.getBufferAsync(Jimp.MIME_PNG)).toString('base64'),
                 processedImageHeight: body.outputHeight,
                 processedImageWidth: body.outputWidth,
-                originalBoundingRect: boundingRect // topleft is the offset from original image
+                originalBoundingRect: boundingRect, // topleft is the offset from original image
             });
         }
 
@@ -44,17 +44,16 @@ export class ImagePreprocessorModel {
         let top = boundingRect.topleft.r;
         let left = boundingRect.topleft.c;
         let bottom = boundingRect.bottomRight.r;
-        let right = boundingRect.bottomRight.c
-
+        let right = boundingRect.bottomRight.c;
 
         inputJimp.crop(left, top, right - left, bottom - top).resize(outputWidth - 2, outputHeight - 2);
         const imageWithWhiteBorder = new Jimp(outputWidth, outputHeight, 'white').blit(inputJimp, 1, 1);
         return imageWithWhiteBorder;
     }
-    
+
     private async parseImageIntoIndividualItems(jimp: Jimp): Promise<Jimp[]> {
-        // not implemented 
-        return [ jimp ];
+        // not implemented
+        return [jimp];
     }
 
     private findBoundingRect(jimp: Jimp): BoundingRect {
@@ -76,9 +75,8 @@ export class ImagePreprocessorModel {
             }
         }
 
-        return {topleft: {r: top, c: left}, bottomRight: {r: bottom, c: right}};
+        return { topleft: { r: top, c: left }, bottomRight: { r: bottom, c: right } };
     }
-
 
     private async getJimpImage(body: ImagePreprocessRequestBody): Promise<Jimp> {
         const buffer = body.inputCompression === COMPRESSIONTYPE.GZIP ? await ungzip(Buffer.from(body.originalImage, 'base64')) : Buffer.from(body.originalImage, 'base64');
