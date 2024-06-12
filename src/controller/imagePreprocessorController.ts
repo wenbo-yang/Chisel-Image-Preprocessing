@@ -6,7 +6,6 @@ import { ParsedQs } from 'qs';
 import { DoNotRespondError } from '../../Chisel-Global-Common-Libraries/src/types/commonTypes';
 
 export class ImagePreprocessingServiceController {
-
     private imagePreprocessorModel: ImagePreprocessorModel;
     private config: IImagePreprocessingServiceConfig;
 
@@ -20,8 +19,7 @@ export class ImagePreprocessingServiceController {
             const body = req.body as ImagePreprocessRequestBody;
             const readStream = await this.imagePreprocessorModel.processImage(body);
             readStream.pipe(res);
-        }
-        catch (e) {   
+        } catch (e) {
             throw new DoNotRespondError(e as Error);
         }
     }

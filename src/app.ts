@@ -4,7 +4,7 @@ import https from 'https';
 import fs from 'fs';
 import { ImagePreprocessingServiceConfig } from './config';
 import { ControllerFactory } from './controller/controllerFactory';
-import { processError } from '../Chisel-Global-Common-Libraries//src/lib/error'; 
+import { processError } from '../Chisel-Global-Common-Libraries//src/lib/error';
 
 const config = new ImagePreprocessingServiceConfig();
 
@@ -27,7 +27,6 @@ app.get('/healthCheck', (req, res) => {
 });
 
 app.post('/process', async (req, res) => {
-
     try {
         const imagePreprocessor = ControllerFactory.makeImagePreprocessingServiceController(config);
         imagePreprocessor.process(req, res);

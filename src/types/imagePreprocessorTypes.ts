@@ -1,4 +1,4 @@
-import { COMPRESSIONTYPE, IMAGEDATATYPE, IServicePorts, Point } from '../../Chisel-Global-Common-Libraries/src/types/commonTypes'
+import { COMPRESSIONTYPE, IMAGEDATATYPE, IServicePorts, Point } from '../../Chisel-Global-Common-Libraries/src/types/commonTypes';
 
 export interface IImagePreprocessingServiceConfig {
     grayScaleWhiteThreshold: number;
@@ -19,7 +19,7 @@ export interface ImagePreprocessRequestBody {
 }
 
 export interface ImagePreprocessingResponseBody {
-    processedImages: ProcessedImage[]
+    processedImages: ProcessedImage[];
 }
 
 export interface BoundingRect {
@@ -32,8 +32,6 @@ export interface ProcessedImage {
     processedImageCompression: COMPRESSIONTYPE;
     processedImage: string;
     processedImageHeight: number;
-    processedImageWidth: number; 
+    processedImageWidth: number;
     originalBoundingRect: BoundingRect; // topleft is the offset from original image
 }
-
-

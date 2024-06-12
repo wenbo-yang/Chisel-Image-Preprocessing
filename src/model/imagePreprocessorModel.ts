@@ -34,7 +34,7 @@ export class ImagePreprocessorModel {
                 processedImageHeight: body.outputHeight,
                 processedImageWidth: body.outputWidth,
                 originalBoundingRect: boundingRect // topleft is the offset from original image
-            })
+            });
         }
 
         return fsSync.createReadStream(Buffer.from(JSON.stringify(processedImage)));
