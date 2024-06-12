@@ -30,7 +30,7 @@ export class ImagePreprocessorModel {
             processedImage.push({
                 processedImageType: body.outputType,
                 processedImageCompression: body.outputCompression,
-                processedImage: body.outputCompression === COMPRESSIONTYPE.GZIP ? Buffer.from(await gzip(await blurredImage.getBufferAsync(Jimp.MIME_PNG))).toString('base64') : Buffer.from(await blurredImage.getBufferAsync(Jimp.MIME_PNG)).toString('base64');
+                processedImage: body.outputCompression === COMPRESSIONTYPE.GZIP ? Buffer.from(await gzip(await blurredImage.getBufferAsync(Jimp.MIME_PNG))).toString('base64') : Buffer.from(await blurredImage.getBufferAsync(Jimp.MIME_PNG)).toString('base64'),
                 processedImageHeight: body.outputHeight,
                 processedImageWidth: body.outputWidth,
                 originalBoundingRect: boundingRect // topleft is the offset from original image
