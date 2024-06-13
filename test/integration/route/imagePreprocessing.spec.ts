@@ -36,13 +36,13 @@ describe('skeletonize request', () => {
                 inputCompression: COMPRESSIONTYPE.PLAIN,
                 outputCompression: COMPRESSIONTYPE.PLAIN,
                 outputType: IMAGEDATATYPE.PNG,
-                outputHeight: 50,
-                outputWidth: 50,
+                outputHeight: 80,
+                outputWidth: 80,
             });
 
             expect(response.status).toBe(HttpStatusCode.Ok);
             const image = await Jimp.read(Buffer.from(response.data[0].processedImage, 'base64'));
-            await image.writeAsync('./test/integration/data/running_man_image_1_output.png');
+            await image.writeAsync('./test/integration/data/running_man_image_1_output_test.png');
         });
     });
 });

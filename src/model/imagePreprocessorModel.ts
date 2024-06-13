@@ -23,13 +23,13 @@ export class ImagePreprocessorModel {
         const processedImage: ProcessedImage[] = [];
         for (let i = 0; i < images.length; i++) {
             const boundingRect = this.findBoundingRect(images[i]);
-            const blurredImage = images[i].blur(8);
-            const resizedImage = this.resizeImage(blurredImage, boundingRect, body.outputHeight, body.outputWidth);
 
+            const resizedImage = this.resizeImage(images[i], boundingRect, body.outputHeight, body.outputWidth);
+            const blurredImage = resizedImage.blur(4).contrast(0.2);
             processedImage.push({
                 processedImageType: body.outputType,
                 processedImageCompression: body.outputCompression,
-                processedImage: body.outputCompression === COMPRESSIONTYPE.GZIP ? Buffer.from(await gzip(await resizedImage.getBufferAsync(Jimp.MIME_PNG))).toString('base64') : Buffer.from(await blurredImage.getBufferAsync(Jimp.MIME_PNG)).toString('base64'),
+                processedImage: body.outputCompression === COMPRESSIONTYPE.GZIP ? Buffer.from(await gzip(await blurredImage.getBufferAsync(Jimp.MIME_PNG))).toString('base64') : Buffer.from(await blurredImage.getBufferAsync(Jimp.MIME_PNG)).toString('base64'),
                 processedImageHeight: body.outputHeight,
                 processedImageWidth: body.outputWidth,
                 originalBoundingRect: boundingRect, // topleft is the offset from original image
