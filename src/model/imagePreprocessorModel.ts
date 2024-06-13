@@ -12,7 +12,7 @@ export class ImagePreprocessorModel {
         this.config = config || new ImagePreprocessingServiceConfig();
     }
 
-    public async processImage(body: ImagePreprocessRequestBody): Promise<ReadStream> {
+    public async processImage(body: ImagePreprocessRequestBody): Promise<ProcessedImage[]> {
         if (body.originalImageType !== IMAGEDATATYPE.PNG) {
             throw new Error('image type other than PNG is not supported for now');
         }
@@ -23,21 +23,20 @@ export class ImagePreprocessorModel {
         const processedImage: ProcessedImage[] = [];
         for (let i = 0; i < images.length; i++) {
             const boundingRect = this.findBoundingRect(images[i]);
-            const resizedImage = this.resizeImage(images[i], boundingRect, body.outputHeight, body.outputWidth);
-
-            const blurredImage = resizedImage.blur(5);
+            const blurredImage = images[i].blur(8);
+            const resizedImage = this.resizeImage(blurredImage, boundingRect, body.outputHeight, body.outputWidth);
 
             processedImage.push({
                 processedImageType: body.outputType,
                 processedImageCompression: body.outputCompression,
-                processedImage: body.outputCompression === COMPRESSIONTYPE.GZIP ? Buffer.from(await gzip(await blurredImage.getBufferAsync(Jimp.MIME_PNG))).toString('base64') : Buffer.from(await blurredImage.getBufferAsync(Jimp.MIME_PNG)).toString('base64'),
+                processedImage: body.outputCompression === COMPRESSIONTYPE.GZIP ? Buffer.from(await gzip(await resizedImage.getBufferAsync(Jimp.MIME_PNG))).toString('base64') : Buffer.from(await blurredImage.getBufferAsync(Jimp.MIME_PNG)).toString('base64'),
                 processedImageHeight: body.outputHeight,
                 processedImageWidth: body.outputWidth,
                 originalBoundingRect: boundingRect, // topleft is the offset from original image
             });
         }
 
-        return fsSync.createReadStream(Buffer.from(JSON.stringify(processedImage)));
+        return processedImage;
     }
 
     private resizeImage(inputJimp: Jimp, boundingRect: BoundingRect, outputHeight: number, outputWidth: number): Jimp {
@@ -80,6 +79,6 @@ export class ImagePreprocessorModel {
 
     private async getJimpImage(body: ImagePreprocessRequestBody): Promise<Jimp> {
         const buffer = body.inputCompression === COMPRESSIONTYPE.GZIP ? await ungzip(Buffer.from(body.originalImage, 'base64')) : Buffer.from(body.originalImage, 'base64');
-        return new Jimp(buffer);
+        return await Jimp.read(buffer);
     }
 }
