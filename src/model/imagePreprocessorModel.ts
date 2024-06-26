@@ -1,5 +1,5 @@
 import fsSync, { ReadStream } from 'fs';
-import { BoundingRect, IImagePreprocessingServiceConfig, ImagePreprocessRequestBody, ProcessedImage } from '../types/imagePreprocessorTypes';
+import { BoundingRect, IImagePreprocessingServiceConfig, ImagePreprocessRequestBody, PREDEFINEDPROCESSOINGMETHOD, ProcessedImage } from '../types/imagePreprocessorTypes';
 import { COMPRESSIONTYPE, IMAGEDATATYPE } from '../../Chisel-Global-Common-Libraries/src/types/commonTypes';
 import { gzip, ungzip } from 'node-gzip';
 import Jimp from 'jimp';
@@ -25,11 +25,25 @@ export class ImagePreprocessorModel {
             const boundingRect = this.findBoundingRect(images[i]);
 
             const resizedImage = this.resizeImage(images[i], boundingRect, body.outputHeight, body.outputWidth);
-            const blurredImage = resizedImage.blur(4).contrast(0.2);
+            const blurredImage = resizedImage.blur(3).grayscale().contrast(0.8);
+            
             processedImage.push({
                 processedImageType: body.outputType,
                 processedImageCompression: body.outputCompression,
                 processedImage: body.outputCompression === COMPRESSIONTYPE.GZIP ? Buffer.from(await gzip(await blurredImage.getBufferAsync(Jimp.MIME_PNG))).toString('base64') : Buffer.from(await blurredImage.getBufferAsync(Jimp.MIME_PNG)).toString('base64'),
+                processedImageDescription: [ { description: PREDEFINEDPROCESSOINGMETHOD.BLURRED }, {description: PREDEFINEDPROCESSOINGMETHOD.SHRINKED}],
+                processedImageHeight: body.outputHeight,
+                processedImageWidth: body.outputWidth,
+                originalBoundingRect: boundingRect, // topleft is the offset from original image
+            });
+
+            const mirrorImage = blurredImage.flip(true, false);
+            
+            processedImage.push({
+                processedImageType: body.outputType,
+                processedImageCompression: body.outputCompression,
+                processedImage: body.outputCompression === COMPRESSIONTYPE.GZIP ? Buffer.from(await gzip(await mirrorImage.getBufferAsync(Jimp.MIME_PNG))).toString('base64') : Buffer.from(await mirrorImage.getBufferAsync(Jimp.MIME_PNG)).toString('base64'),
+                processedImageDescription: [ { description: PREDEFINEDPROCESSOINGMETHOD.BLURRED }, {description: PREDEFINEDPROCESSOINGMETHOD.SHRINKED}, {description: PREDEFINEDPROCESSOINGMETHOD.MIRRORED}],
                 processedImageHeight: body.outputHeight,
                 processedImageWidth: body.outputWidth,
                 originalBoundingRect: boundingRect, // topleft is the offset from original image

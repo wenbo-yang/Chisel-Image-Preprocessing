@@ -27,10 +27,24 @@ export interface BoundingRect {
     bottomRight: Point;
 }
 
+export enum PREDEFINEDPROCESSOINGMETHOD {
+    SHRINKED = 'SHRINKED',
+    EXPANDED = 'EXPANDED',
+    MIRRORED = 'MIRRORED',
+    BLURRED = 'BLURRED',
+    OTHER = 'OTHER',
+}
+
+export interface ImageDesciption {
+    description: PREDEFINEDPROCESSOINGMETHOD;
+    otherDescription?: string;
+}
+
 export interface ProcessedImage {
     processedImageType: IMAGEDATATYPE;
     processedImageCompression: COMPRESSIONTYPE;
     processedImage: string;
+    processedImageDescription: ImageDesciption[];
     processedImageHeight: number;
     processedImageWidth: number;
     originalBoundingRect: BoundingRect; // topleft is the offset from original image
