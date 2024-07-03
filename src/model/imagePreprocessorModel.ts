@@ -25,7 +25,7 @@ export class ImagePreprocessorModel {
             const boundingRect = this.findBoundingRect(images[i]);
 
             const resizedImage = this.resizeImage(images[i], boundingRect, body.outputHeight, body.outputWidth);
-            const blurredImage = resizedImage.blur(3).grayscale().contrast(0.8);
+            const blurredImage = resizedImage.grayscale();
             
             processedImage.push({
                 processedImageType: body.outputType,
