@@ -1,9 +1,9 @@
-// import { SkeletonizationServiceConfig } from '../config';
-// import { ISkeletonizationServiceConfig } from '../types/skeletonizeTypes';
-// import { SkeletonizeController } from './skeletonizeController';
+import { ImagePreprocessingServiceConfig } from '../config';
+import { IImagePreprocessingServiceConfig } from '../types/imagePreprocessorTypes';
+import { ImagePreprocessingServiceController } from './imagePreprocessorController';
 
-// export class ControllerFactory {
-//     static makeSkeletonizeController(config?: ISkeletonizationServiceConfig): SkeletonizeController {
-//         return new SkeletonizeController(config || new SkeletonizationServiceConfig());
-//     }
-// }
+export class ControllerFactory {
+    static makeImagePreprocessingServiceController(config?: IImagePreprocessingServiceConfig): ImagePreprocessingServiceController {
+        return new ImagePreprocessingServiceController(config || new ImagePreprocessingServiceConfig());
+    }
+}
