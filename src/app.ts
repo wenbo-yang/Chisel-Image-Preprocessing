@@ -5,7 +5,6 @@ import fs from 'fs';
 import { ImagePreprocessingServiceConfig } from './config';
 import { ControllerFactory } from './controller/controllerFactory';
 import { processError } from '../Chisel-Global-Common-Libraries//src/lib/error';
-import { HttpStatusCode } from 'axios';
 
 const config = new ImagePreprocessingServiceConfig();
 
