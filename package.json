@@ -36,7 +36,7 @@
         "typescript": "^5.2.2"
     },
     "dependencies": {
-        "@techstark/opencv-js": "4.10.0-beta.1",
+        "@techstark/opencv-js": "4.10.0-release.1",
         "@types/bmp-js": "0.1.2",
         "axios": "1.6.2",
         "bmp-js": "0.1.0",
