@@ -1,7 +1,7 @@
 import { httpsUrl } from '../utils';
 import axios, { HttpStatusCode } from 'axios';
 import https from 'https';
-import fs  from 'fs/promises';
+import fs from 'fs/promises';
 import { ImagePreprocessRequestBody } from '../../../src/types/imagePreprocessorTypes';
 import { COMPRESSIONTYPE, IMAGEDATATYPE } from '../../../Chisel-Global-Common-Libraries/src/types/commonTypes';
 import Jimp from 'jimp';
@@ -25,7 +25,7 @@ describe('skeletonize request', () => {
     describe('POST /process', () => {
         const processImageUrl = httpsUrl + '/process';
 
-        it('should response with 200 with calling process with plain image', async() => {
+        it('should response with 200 with calling process with plain image', async () => {
             const sampleImageUrl = './test/integration/data/running_man_image_5.png';
             const data = await fs.readFile(sampleImageUrl);
             const arrayBuffer = Buffer.from(data).toString('base64');
@@ -45,7 +45,7 @@ describe('skeletonize request', () => {
             await image.writeAsync('./test/integration/data/running_man_image_5_output_test.png');
         });
 
-        it('should response with 200 with calling process with plain image', async() => {
+        it('should response with 200 with calling process with plain image', async () => {
             const sampleImageUrl = './test/integration/data/running_man_image_5.png';
             const data = await fs.readFile(sampleImageUrl);
             const arrayBuffer = Buffer.from(data).toString('base64');
@@ -65,7 +65,7 @@ describe('skeletonize request', () => {
             await image.writeAsync('./test/integration/data/running_man_image_5_mirror_output_test.png');
         });
 
-        it('should response with 200 with calling process with another plain image', async() => {
+        it('should response with 200 with calling process with another plain image', async () => {
             const sampleImageUrl = './test/integration/data/running_man_image_4.png';
             const data = await fs.readFile(sampleImageUrl);
             const arrayBuffer = Buffer.from(data).toString('base64');

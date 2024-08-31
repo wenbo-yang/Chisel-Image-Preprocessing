@@ -26,24 +26,24 @@ export class ImagePreprocessorModel {
 
             const resizedImage = this.resizeImage(images[i], boundingRect, body.outputHeight, body.outputWidth);
             const blurredImage = resizedImage.grayscale();
-            
+
             processedImage.push({
                 processedImageType: body.outputType,
                 processedImageCompression: body.outputCompression,
                 processedImage: body.outputCompression === COMPRESSIONTYPE.GZIP ? Buffer.from(await gzip(await blurredImage.getBufferAsync(Jimp.MIME_PNG))).toString('base64') : Buffer.from(await blurredImage.getBufferAsync(Jimp.MIME_PNG)).toString('base64'),
-                processedImageDescription: [ { description: PREDEFINEDPROCESSOINGMETHOD.BLURRED }, {description: PREDEFINEDPROCESSOINGMETHOD.SHRINKED}],
+                processedImageDescription: [{ description: PREDEFINEDPROCESSOINGMETHOD.BLURRED }, { description: PREDEFINEDPROCESSOINGMETHOD.SHRINKED }],
                 processedImageHeight: body.outputHeight,
                 processedImageWidth: body.outputWidth,
                 originalBoundingRect: boundingRect, // topleft is the offset from original image
             });
 
             const mirrorImage = blurredImage.flip(true, false);
-            
+
             processedImage.push({
                 processedImageType: body.outputType,
                 processedImageCompression: body.outputCompression,
                 processedImage: body.outputCompression === COMPRESSIONTYPE.GZIP ? Buffer.from(await gzip(await mirrorImage.getBufferAsync(Jimp.MIME_PNG))).toString('base64') : Buffer.from(await mirrorImage.getBufferAsync(Jimp.MIME_PNG)).toString('base64'),
-                processedImageDescription: [ { description: PREDEFINEDPROCESSOINGMETHOD.BLURRED }, {description: PREDEFINEDPROCESSOINGMETHOD.SHRINKED}, {description: PREDEFINEDPROCESSOINGMETHOD.MIRRORED}],
+                processedImageDescription: [{ description: PREDEFINEDPROCESSOINGMETHOD.BLURRED }, { description: PREDEFINEDPROCESSOINGMETHOD.SHRINKED }, { description: PREDEFINEDPROCESSOINGMETHOD.MIRRORED }],
                 processedImageHeight: body.outputHeight,
                 processedImageWidth: body.outputWidth,
                 originalBoundingRect: boundingRect, // topleft is the offset from original image
