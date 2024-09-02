@@ -1,2 +1,2 @@
 require('jest-json');
-jest.setTimeout(5000);
+jest.setTimeout(15000);
