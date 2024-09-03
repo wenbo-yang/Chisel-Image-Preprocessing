@@ -113,4 +113,40 @@ describe('Prototyping', () => {
         cannyEdges.delete();
         cannyEdgesBitmap.delete();
     });
+
+    const lineNoiseThreshold1 = [
+        [20, 200],
+        [100, 200],
+        [50, 200],
+        [100, 50],
+        [200, 50],
+    ];
+    test.each(lineNoiseThreshold)('should find bounding box image, for canny edges', async (lineThreshold, noiseThreshold) => {
+        const img = (await Jimp.read('./test/unit/data/dog_running_0.png')).grayscale();
+        const src = cv.matFromImageData(img.bitmap);
+        const blurredImage = new cv.Mat();
+        cv.GaussianBlur(src, blurredImage, new cv.Size(3, 3), 0, 0);
+        cv.cvtColor(blurredImage, blurredImage, cv.COLOR_RGBA2GRAY);
+
+        const cannyEdges = new cv.Mat();
+        const countours = new cv.MatVector();
+        const hierarchy = new cv.Mat();
+        cv.Canny(blurredImage, cannyEdges, lineThreshold, noiseThreshold, 3, false);
+
+        cv.findContours(cannyEdges, countours, hierarchy, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE);
+        
+        let rectangleColor = new cv.Scalar(255,0,0);
+        for (let i = 0; i < countours.size(); i++) {
+            const boundingRect = cv.boundingRect(countours.get(i));
+            cv.rectangle(blurredImage, new cv.Point(boundingRect.x, boundingRect.y), new cv.Point(boundingRect.x + boundingRect.width, boundingRect.y + boundingRect.height), rectangleColor, 2);
+        }
+
+        cv.cvtColor(blurredImage, blurredImage, cv.COLOR_GRAY2RGBA);
+        
+        await new Jimp({ width: blurredImage.cols, height: blurredImage.rows, data: Buffer.from(blurredImage.data) }).writeAsync(`./test/unit/data/dog_running_0_blurred_bounding_box_canny_l_${lineThreshold}_n_${noiseThreshold}_test.png`);
+
+        src.delete();
+        blurredImage.delete();
+        cannyEdges.delete();
+    });
 });
